@@ -8,8 +8,11 @@ const (
 	TopStoriesURL = "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty"
 )
 
-// RetrieveTopStoriesItemNumbers retrieves from the hacker-news API the top
-// Hacker News stories item numbers.
+// RetrieveTopStoriesItemNumbers retrieves up to 500 top and new stories are at
+// https://hacker-news.firebaseio.com/v0/topstories and
+// https://hacker-news.firebaseio.com/v0/newstories.
+//
+// Example: https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty
 func RetrieveTopStoriesItemNumbers() *TopStories {
 	ts := TopStories{}
 	err := getJSON(TopStoriesURL, &ts)
