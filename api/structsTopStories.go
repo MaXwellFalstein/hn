@@ -1,5 +1,4 @@
 package hnapi
 
-// TopStories is the response object from the
-// https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty endpoint.
-type TopStories []int
+// StoryItemNumbers is a slice of Hacker News item numbers.
+type StoryItemNumbers []int
