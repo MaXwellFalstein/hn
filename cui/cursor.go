@@ -1,11 +1,6 @@
 package hncui
 
-import (
-	"fmt"
-
-	"github.com/jroimartin/gocui"
-	"github.com/kkirsche/hn/api"
-)
+import "github.com/jroimartin/gocui"
 
 func cursorDown(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
@@ -67,15 +62,15 @@ func layout(g *gocui.Gui) error {
 		// fmt.Println(user.Karma)
 
 		// Top Stories section
-		topStores := hnapi.RetrieveTopStoriesItemNumbers()
-		for i, tsNumber := range *topStores {
-			if i > 25 {
-				break
-			}
-			item := hnapi.GetItem(tsNumber)
-
-			fmt.Fprintf(v, "%s\n\n", item.Title)
-		}
+		// topStores := hnapi.RetrieveTopStoriesItemNumbers()
+		// for i, tsNumber := range *topStores {
+		// 	if i > 25 {
+		// 		break
+		// 	}
+		// 	item := hnapi.GetItem(tsNumber)
+		//
+		// 	fmt.Fprintf(v, "%s\n\n", item.Title)
+		// }
 
 		v.Editable = false
 		v.Wrap = false
