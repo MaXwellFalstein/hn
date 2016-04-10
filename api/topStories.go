@@ -5,22 +5,22 @@ import "log"
 const (
 	// TopStoriesURL is the URL used to retrieve the top hacker news stories item
 	// numbers.
-	TopStoriesURL = "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty"
+	TopStoriesURL = "https://hacker-news.firebaseio.com/v0/topstories.json"
 )
 
-// RetrieveTopStoriesItemNumbers retrieves up to 500 top and new stories are at
+// TopStoriesItemNumbers retrieves up to 500 top and new stories are at
 // https://hacker-news.firebaseio.com/v0/topstories and
 // https://hacker-news.firebaseio.com/v0/newstories.
 //
 // Example: https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty
-func RetrieveTopStoriesItemNumbers() *TopStories {
-	ts := TopStories{}
+func TopStoriesItemNumbers() StoryItemNumbers {
+	ts := StoryItemNumbers{}
 	err := getJSON(TopStoriesURL, &ts)
 	if err != nil {
 		log.Panicln(err.Error())
 	}
 
-	return &ts
+	return ts
 }
 
 // RetrieveTopNStories returns the top n stories from Hacker News. Returns a
@@ -28,10 +28,10 @@ func RetrieveTopStoriesItemNumbers() *TopStories {
 func RetrieveTopNStories(n int, logger *Logger) *[]HNItem {
 	var stories []HNItem
 	logger.VerbosePrintln("Retrieving Top Story Item Numbers")
-	topStoriesIDs := RetrieveTopStoriesItemNumbers()
+	topStoriesIDs := TopStoriesItemNumbers()
 
 	logger.VerbosePrintfln("Retrieving Top %d Stories", n)
-	for i, storyID := range *topStoriesIDs {
+	for i, storyID := range topStoriesIDs {
 		if i >= n {
 			return &stories
 		}
@@ -49,10 +49,10 @@ func StreamTopNStories(n int, logger *Logger) chan *HNItem {
 	c := make(chan *HNItem)
 	go func(n int, logger *Logger, c chan *HNItem) {
 		logger.VerbosePrintln("Retrieving Top Story Item Numbers")
-		topStoriesIDs := RetrieveTopStoriesItemNumbers()
+		topStoriesIDs := TopStoriesItemNumbers()
 
 		logger.VerbosePrintfln("Retrieving Top %d Stories", n)
-		for i, storyID := range *topStoriesIDs {
+		for i, storyID := range topStoriesIDs {
 			if i >= n {
 				close(c)
 				return
