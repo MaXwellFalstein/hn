@@ -13,6 +13,14 @@ func NewLogger(verbose bool) *Logger {
 	}
 }
 
+// Printfln allows you to use printfln while verifying whether you are or
+// are not in verbose mode.
+func (l *Logger) Printfln(format string, a ...interface{}) {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
+	fmt.Printf(format+"\n", a...)
+}
+
 // VerbosePrintln allows you to use println while verifying whether you are or
 // are not in verbose mode.
 func (l *Logger) VerbosePrintln(a ...interface{}) {
