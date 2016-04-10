@@ -75,7 +75,11 @@ print the 25th top Hacker News story. After sanitization, you provided: %s`, arg
 			}
 		}
 
-		stories := hnapi.TopStoriesItemNumbers()
+		stories, err := hnapi.TopStoriesItemNumbers()
+		if err != nil {
+			log.Panicln(err)
+		}
+
 		story := hnapi.GetItem(stories[argsInt])
 
 		fmt.Println(story.Title)

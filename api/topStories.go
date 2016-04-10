@@ -1,7 +1,5 @@
 package hnapi
 
-import "log"
-
 const (
 	// TopStoriesURL is the URL used to retrieve the top hacker news stories item
 	// numbers.
@@ -13,44 +11,51 @@ const (
 // https://hacker-news.firebaseio.com/v0/newstories.
 //
 // Example: https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty
-func TopStoriesItemNumbers() StoryItemNumbers {
+func TopStoriesItemNumbers() (StoryItemNumbers, error) {
 	ts := StoryItemNumbers{}
 	err := getJSON(TopStoriesURL, &ts)
 	if err != nil {
-		log.Panicln(err.Error())
+		return nil, err
 	}
 
-	return ts
+	return ts, nil
 }
 
 // RetrieveTopNStories returns the top n stories from Hacker News. Returns a
 // pointer to a slice of Hacker News items.
-func RetrieveTopNStories(n int, logger *Logger) *[]HNItem {
+func RetrieveTopNStories(n int, logger *Logger) (*[]HNItem, error) {
 	var stories []HNItem
 	logger.VerbosePrintln("Retrieving Top Story Item Numbers")
-	topStoriesIDs := TopStoriesItemNumbers()
+	topStoriesIDs, err := TopStoriesItemNumbers()
+	if err != nil {
+		return nil, err
+	}
 
 	logger.VerbosePrintfln("Retrieving Top %d Stories", n)
 	for i, storyID := range topStoriesIDs {
 		if i >= n {
-			return &stories
+			return &stories, nil
 		}
 
 		story := GetItem(storyID)
 		stories = append(stories, *story)
 	}
 
-	return &stories
+	return &stories, nil
 }
 
-// StreamTopNStories streams using the top n stories from Hacker News. Returns a
-// pointer to a slice of Hacker News items.
-func StreamTopNStories(n int, logger *Logger) chan *HNItem {
+// StreamTopNStories streams  the top n stories from Hacker News.
+// Returns a channel over which to receive the stories.
+func StreamTopNStories(n int, logger *Logger) (chan *HNItem, error) {
 	c := make(chan *HNItem)
-	go func(n int, logger *Logger, c chan *HNItem) {
-		logger.VerbosePrintln("Retrieving Top Story Item Numbers")
-		topStoriesIDs := TopStoriesItemNumbers()
+	logger.VerbosePrintln("Retrieving Top Story Item Numbers")
+	topStoriesIDs, err := TopStoriesItemNumbers()
+	if err != nil {
+		logger.Printfln("Failed to retrieve Top Stories Item Numbers with error:\n\n%s.", err.Error())
+		return nil, err
+	}
 
+	go func(topStoriesIDs StoryItemNumbers, n int, logger *Logger, c chan *HNItem) {
 		logger.VerbosePrintfln("Retrieving Top %d Stories", n)
 		for i, storyID := range topStoriesIDs {
 			if i >= n {
@@ -63,7 +68,7 @@ func StreamTopNStories(n int, logger *Logger) chan *HNItem {
 		}
 
 		close(c)
-	}(n, logger, c)
+	}(topStoriesIDs, n, logger, c)
 
-	return c
+	return c, nil
 }

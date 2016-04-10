@@ -65,7 +65,10 @@ hn top 10`,
 			argsInt = 25
 		}
 
-		storiesCh := hnapi.StreamTopNStories(argsInt, logger)
+		storiesCh, err := hnapi.StreamTopNStories(argsInt, logger)
+		if err != nil {
+			log.Panicln(err)
+		}
 
 		i := 1
 		for story := range storiesCh {
