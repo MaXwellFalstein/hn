@@ -10,7 +10,7 @@ import (
 func GetItem(itemNumber int) *HNItem {
 	item := HNItem{}
 	itemString := strconv.Itoa(itemNumber)
-	err := getJSON("https://hacker-news.firebaseio.com/v0/item/"+itemString+".json?print=pretty", &item)
+	err := getJSON("https://hacker-news.firebaseio.com/v0/item/"+itemString+".json", &item)
 	if err != nil {
 		log.Panicln(err.Error())
 	}
