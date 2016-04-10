@@ -15,14 +15,17 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/jaytaylor/html2text"
 	"github.com/kkirsche/hn/api"
+	"github.com/skratchdot/open-golang/open"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -92,7 +95,39 @@ print the 25th top Hacker News story. After sanitization, you provided: %s`, arg
 			fmt.Println(story.Text)
 		} else {
 			fmt.Println()
-			fmt.Println("No text available.")
+			fmt.Print("Post does not contain any text. Would you like to open the URL in your web browser? y/n: ")
+			reader := bufio.NewReader(os.Stdin)
+			resp, err := reader.ReadString('\n')
+			if err != nil {
+				log.Panicln(err)
+			}
+
+			openInBrowser := false
+			validResp := false
+			resp = strings.ToLower(strings.TrimSpace(string(resp)))
+			for validResp != true {
+				switch resp {
+				case "y":
+					validResp = true
+					openInBrowser = true
+				case "n":
+					validResp = true
+				default:
+					fmt.Println("Invalid response. Please enter y for yes or n for no.")
+					fmt.Print("Would you like to open the URL in your web browser? y/n: ")
+					reader := bufio.NewReader(os.Stdin)
+					resp, err = reader.ReadString('\n')
+					if err != nil {
+						log.Panicln(err)
+					}
+					resp = strings.ToLower(strings.TrimSpace(string(resp)))
+				}
+			}
+
+			if openInBrowser {
+				logger.VerbosePrintfln("Opening %s in default web browser.", story.URL)
+				open.Run(story.URL)
+			}
 		}
 	},
 }
