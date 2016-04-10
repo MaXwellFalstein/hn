@@ -10,7 +10,7 @@ Hacker News Viewer, In Go!
 You can retrieve and print the Top Stories from Hacker News. If no argument is
 provided to `hn top`, it will assume you would like the top 25 stories.
 
-```shell
+```
 ~/g/s/g/k/hn git:master ❯❯❯ hn top 25                                        ✱ ◼
 1 Congratulations You’ve Been Fired
 2 How a Car Engine Works
@@ -44,7 +44,9 @@ provided to `hn top`, it will assume you would like the top 25 stories.
 To read, if it is a post which has local text a Hacker News Story, simply tell the tool which story you would like to
 read, like so:
 
-```shell
+##### Text Post
+
+```
 ~/g/s/g/k/hn git:master ❯❯❯ hn top story 21                                  ✱ ◼
 Ask HN: Is it worth paying for a Coursera course?
 By: eecks, When: 2016-04-09 10:32:11 -0400 EDT
@@ -54,4 +56,16 @@ receiving a certificate on completion.
 
 Does anyone here have one of those certs? Do they hold any value? Is it worth
 paying for the cert when you can still do the full course for free?
+```
+
+##### URL Post
+
+```
+~/g/s/g/k/hn git:master ❯❯❯ hn top story 1                                    ✱
+Congratulations You’ve Been Fired
+By: dcschelt, When: 2016-04-09 17:28:11 -0400 EDT
+
+From URL: http://mobile.nytimes.com/2016/04/10/opinion/sunday/congratulations-youve-been-fired.html?smid=tw-share&referer=https://t.co/GST3iLv3Zn
+
+Post does not contain any text. Would you like to open the URL in your web browser? y/n: y
 ```
