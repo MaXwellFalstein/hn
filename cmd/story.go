@@ -33,13 +33,10 @@ import (
 // storyCmd represents the story command
 var storyCmd = &cobra.Command{
 	Use:   "story",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Read an individual Hacker News story.",
+	Long: `The "story" command allows you to read an individual Hacker News story. If
+the story is a URL, you will be prompted to open it in a browser, otherwise it
+will be printed to the command line.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var (
 			argsMerged string

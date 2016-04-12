@@ -25,6 +25,7 @@ import (
 
 var (
 	cfgFile string
+	parent  string
 	logger  *hnapi.Logger
 )
 
